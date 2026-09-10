@@ -12,11 +12,15 @@
 
 * { box-sizing: border-box; }
 body { margin: 0; min-width: 320px; background: var(--bg); color: var(--text); font-family: var(--font-sans); }
-main { width: min(1120px, calc(100% - 32px)); margin: 0 auto; padding: 64px 0; }
+.mouse-background { --mouse-x: 50vw; --mouse-y: 20vh; position: fixed; z-index: -1; inset: 0; overflow: hidden; pointer-events: none; background-image: radial-gradient(560px circle at var(--mouse-x) var(--mouse-y), #47e89019, transparent 48%), linear-gradient(#47e8900b 1px, transparent 1px), linear-gradient(90deg, #47e8900b 1px, transparent 1px); background-size: auto, 28px 28px, 28px 28px; mask-image: linear-gradient(to bottom, #000 0%, #0009 55%, transparent 100%); }
+.mouse-background::after { content: ''; position: absolute; left: var(--mouse-x); top: var(--mouse-y); width: 12px; height: 12px; border: 1px solid var(--green); border-radius: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 18px 5px #47e89070; }
+main { position: relative; width: min(1120px, calc(100% - 32px)); margin: 0 auto; padding: 64px 0; }
 header { display: flex; align-items: center; gap: 14px; }
 h1 { margin: 0; font: 700 2rem/1 var(--font-mono); letter-spacing: -.08em; color: var(--green); }
 .brand-mark { display: grid; place-items: center; width: 42px; height: 42px; border: 1px solid var(--green); border-radius: 8px; color: var(--green); font: 700 14px/1 var(--font-mono); box-shadow: 0 0 22px #47e89035; animation: logo-pulse 2.4s ease-in-out infinite; }
 .brand-mark span { color: var(--amber); }
+.ascii-logo { margin: 0; color: var(--green); font: 700 clamp(8px, 1.4vw, 14px)/1.03 var(--font-mono); letter-spacing: -.04em; text-shadow: 0 0 13px #47e8904d; animation: logo-pulse 2.4s ease-in-out infinite; }
+.brand-log { display: block; margin-top: 6px; color: var(--text-dim); font: 11px var(--font-mono); }
 .tagline { margin: 12px 0 28px; color: var(--text-dim); }
 form { display: flex; gap: 10px; margin-bottom: 20px; }
 input { min-width: 0; flex: 1; border: 1px solid var(--border); border-radius: 7px; background: var(--panel); color: var(--text); padding: 13px 14px; font: 14px var(--font-mono); }
@@ -34,5 +38,5 @@ th, td { padding: 12px; border-bottom: 1px solid var(--border); text-align: left
 @keyframes terminal-line-in { from { opacity: 0; transform: translateY(2px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes cursor-blink { 50% { opacity: 0; } }
 @keyframes logo-pulse { 50% { box-shadow: 0 0 30px #47e89075; } }
-@media (max-width: 640px) { main { width: min(100% - 24px, 1120px); padding: 32px 0; } form { flex-direction: column; } button { height: 44px; } table, tbody, tr, td { display: block; } thead { display: none; } table { border: 0; background: transparent; } tr { margin: 0 0 14px; padding: 6px 14px; border: 1px solid var(--border); border-radius: 8px; background: var(--panel); } td { padding: 9px 0; border-bottom: 1px solid var(--border); overflow-wrap: anywhere; } td:last-child { border-bottom: 0; } td::before { content: attr(data-label); display: block; margin-bottom: 3px; color: var(--text-dim); font: 11px var(--font-mono); text-transform: uppercase; } }
-@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; scroll-behavior: auto !important; } }
+@media (max-width: 640px) { main { width: min(100% - 24px, 1120px); padding: 32px 0; } .brand-mark { display: none; } form { flex-direction: column; } button { height: 44px; } table, tbody, tr, td { display: block; } thead { display: none; } table { border: 0; background: transparent; } tr { margin: 0 0 14px; padding: 6px 14px; border: 1px solid var(--border); border-radius: 8px; background: var(--panel); } td { padding: 9px 0; border-bottom: 1px solid var(--border); overflow-wrap: anywhere; } td:last-child { border-bottom: 0; } td::before { content: attr(data-label); display: block; margin-bottom: 3px; color: var(--text-dim); font: 11px var(--font-mono); text-transform: uppercase; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; scroll-behavior: auto !important; } .mouse-background::after { display: none; } }
