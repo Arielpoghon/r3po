@@ -38,7 +38,7 @@ def _print_terminal(report: ScanReport) -> None:
         console.print("[yellow]Scan timed out; results are partial.[/yellow]")
 
 
-@app.command()
+@app.command("scan")
 def scan_repo(repo_url: str, output: Annotated[str, typer.Option("--output")] = "terminal",
              out_file: Annotated[Path | None, typer.Option("--out-file")] = None) -> None:
     """Scan a public GitHub or GitLab repository."""
