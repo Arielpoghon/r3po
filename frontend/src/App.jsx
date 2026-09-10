@@ -15,7 +15,7 @@ export default function App() {
     try { setReport(await scanRepository(repoUrl)) } catch (err) { setError(err.message) } finally { setLoading(false) }
   }
   const findings = report ? [...report.findings].sort((a,b) => severityRank[a.severity] - severityRank[b.severity]) : []
-  return <><MouseBackground /><main><header><div className="brand-mark" aria-hidden="true">r3<span>p</span>o</div><div><pre className="ascii-logo" aria-label="r3po">{logo}</pre><span className="brand-log">subfinder log · public repository scanner</span></div></header><p className="tagline">Scan public GitHub and GitLab repositories for CVEs, secrets, and SAST findings.</p>
+  return <><MouseBackground /><main><header><pre className="ascii-logo" aria-label="r3po">{logo}</pre></header><p className="tagline">Scan public GitHub and GitLab repositories for CVEs, secrets, and SAST findings.</p>
     <form onSubmit={submit}><input required value={repoUrl} onChange={e => setRepoUrl(e.target.value)} placeholder="https://github.com/owner/repo" /><button disabled={loading}>{loading ? 'Scanning…' : 'Scan repository'}</button></form>
     <ScanTerminal active={loading} />
     {error && <p role="alert">{error}</p>}{report?.error && <p role="alert">{report.error}</p>}
