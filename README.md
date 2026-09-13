@@ -43,7 +43,13 @@ For a zero-install experience (no local tool setup at all), use the hosted web d
 
 ## Limits and future work
 
-Only public GitHub/GitLab repositories are supported. Scans have a 200MB checkout cap and a default 180-second global timeout. Tool failures are reported without discarding other findings. The hosted single-container service accepts one scan at a time; concurrent requests receive HTTP 429. Future work: an async job queue. There are no accounts, persistence, private-repo tokens, batch scans, CI integration, or Kubernetes deployment.
+- **Public repositories only.** No authentication or token support — private repos are out of scope for this version.
+- **Single scan at a time.** No job queue or background workers; a second scan request while one is running returns HTTP 429. No scan history or persistence — every scan is stateless and its cloned data is deleted immediately after.
+- **200MB clone size limit and 180-second global timeout.** Large repositories may be rejected or return partial results with `scan_timed_out: true`.
+- **Sequential tool execution.** Trivy, Gitleaks, and Semgrep run one after another rather than in parallel, to stay within free-tier hosting memory limits (512MB RAM on Render).
+- **No result deduplication or cross-tool correlation.** Findings are returned as reported by each underlying tool.
+
+Planned but not built: async job queue with progress polling, private-repo support via access tokens, parallel tool execution for self-hosted/paid deployments, scan history persistence.
 
 ## Render
 
