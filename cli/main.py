@@ -14,21 +14,26 @@ from rich.text import Text
 from core.scanner import scan
 from core.schema import ScanReport
 
-app = typer.Typer(no_args_is_help=True)
+app = typer.Typer(no_args_is_help=False)
 console = Console()
 
-_BANNER = r"""/ /\_  / /*/ /\_\_\_\_\_ | |/ /
-/ \_\_ / \_\_/ \_\_/ \_\_ |   /
-/ / / / /*/ /*/ /*/ /   |
-/*/ /*/\_*/\_*/ .\_\_*/*/|*|
-/*/"""
+_BANNER = r"""
+ ______  ______  ______  ______
+|  __  \|____  ||  __  \|  __  \
+| |__) |    / / | |__) | |  | |
+|  _  /    / /  |  ___/| |  | |
+| | \ \   / /_  | |    | |__| |
+|_|  \_\ /____| |_|    |______/
+"""
 
 
-@app.callback()
-def startup_banner() -> None:
+@app.callback(invoke_without_command=True)
+def startup_banner(ctx: typer.Context) -> None:
     """Print the r3po banner before running a command."""
     console.print(Text(_BANNER, style="bright_cyan"))
-    console.print("[bright_cyan]Scan public GitHub and GitLab repositories for CVEs, secrets, and SAST findings.[/bright_cyan]")
+    console.print(Text("Scan public GitHub and GitLab repositories for CVEs, secrets, and SAST findings.", style="dim"))
+    if ctx.invoked_subcommand is None:
+        console.print(ctx.get_help())
 
 
 def _html_report(report: ScanReport) -> str:
