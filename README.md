@@ -29,6 +29,14 @@ r3po's scanning engine depends on three external tools that cannot be bundled vi
    pip install -e .
    ```
 
+> **Note:** on distributions that enforce PEP 668 (Arch, recent Debian/Ubuntu), a plain `pip install -e .` will fail with `externally-managed-environment`. Use a virtual environment first:
+>
+> ```bash
+> python -m venv .venv
+> source .venv/bin/activate
+> pip install -e .
+> ```
+
 3. Run it:
 
    ```bash
