@@ -11,7 +11,31 @@ docker run --rm -p 8000:8000 r3po
 
 Open `http://localhost:8000`. The browser and API share the same origin: FastAPI serves the compiled React files and `/scan` from port 8000, so production needs no CORS configuration.
 
-For the CLI in a Python environment, run `python -m cli.main scan https://github.com/owner/repo`. Add `--output json|html --out-file report.json` for a file report.
+## CLI usage
+
+r3po's scanning engine depends on three external tools that cannot be bundled via pip: Trivy, Gitleaks, and Semgrep. Install them once per machine, then the CLI itself is a single command.
+
+1. Install the three scanning tools (one-time, per machine):
+
+   - Trivy: [https://trivy.dev/latest/getting-started/installation/](https://trivy.dev/latest/getting-started/installation/)
+   - Gitleaks: [https://github.com/gitleaks/gitleaks#installing](https://github.com/gitleaks/gitleaks#installing)
+   - Semgrep: `pip install semgrep`
+
+2. Install r3po:
+
+   ```bash
+   git clone https://github.com/Arielpoghon/r3po.git
+   cd r3po
+   pip install -e .
+   ```
+
+3. Run it:
+
+   ```bash
+   r3po scan https://github.com/digininja/DVWA
+   ```
+
+For a zero-install experience (no local tool setup at all), use the hosted web dashboard instead: [https://r3po.onrender.com/](https://r3po.onrender.com/)
 
 ## Architecture
 

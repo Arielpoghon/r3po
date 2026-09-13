@@ -9,12 +9,26 @@ from typing import Annotated
 import typer
 from rich.console import Console
 from rich.table import Table
+from rich.text import Text
 
 from core.scanner import scan
 from core.schema import ScanReport
 
 app = typer.Typer(no_args_is_help=True)
 console = Console()
+
+_BANNER = r"""/ /\_  / /*/ /\_\_\_\_\_ | |/ /
+/ \_\_ / \_\_/ \_\_/ \_\_ |   /
+/ / / / /*/ /*/ /*/ /   |
+/*/ /*/\_*/\_*/ .\_\_*/*/|*|
+/*/"""
+
+
+@app.callback()
+def startup_banner() -> None:
+    """Print the r3po banner before running a command."""
+    console.print(Text(_BANNER, style="bright_cyan"))
+    console.print("[bright_cyan]Scan public GitHub and GitLab repositories for CVEs, secrets, and SAST findings.[/bright_cyan]")
 
 
 def _html_report(report: ScanReport) -> str:

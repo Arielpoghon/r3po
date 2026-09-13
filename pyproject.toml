@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "r3po"
+version = "0.1.0"
+description = "Public repository vulnerability scanner"
+requires-python = ">=3.10"
+dynamic = ["dependencies"]
+
+[project.scripts]
+r3po = "cli.main:app"
+
+[tool.setuptools]
+packages = ["backend", "cli", "core", "core.tools"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
