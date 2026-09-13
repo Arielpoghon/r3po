@@ -20,6 +20,6 @@ export default function App() {
     <ScanTerminal active={loading} />
     {error && <p role="alert">{error}</p>}{report?.error && <p role="alert">{report.error}</p>}
     {report?.scan_timed_out && <p>Timed out — showing partial results.</p>}{report?.tool_errors.map(e => <p key={e}>Tool warning: {e}</p>)}
-    {report && <table><thead><tr>{['Severity','Tool','File','Line','Title','Description','Remediation'].map(x => <th key={x}>{x}</th>)}</tr></thead><tbody>{findings.map((f,i) => <tr key={i}><td data-label="Severity">{f.severity}</td><td data-label="Tool">{f.tool}</td><td data-label="File">{f.file}</td><td data-label="Line">{f.line}</td><td data-label="Title">{f.title}</td><td data-label="Description">{f.description}</td><td data-label="Remediation">{f.remediation}</td></tr>)}</tbody></table>}
+    {report && <table><thead><tr>{['Severity','Tool','File','Line','Title','Description','Remediation'].map(x => <th key={x}>{x}</th>)}</tr></thead><tbody>{findings.map((f,i) => <tr key={i}><td data-label="Severity">{f.severity}</td><td data-label="Tool">{f.tool}</td><td data-label="File">{f.source_url ? <a href={f.source_url} target="_blank" rel="noopener noreferrer">{f.file}</a> : f.file}</td><td data-label="Line">{f.line}</td><td data-label="Title">{f.title}</td><td data-label="Description">{f.description}</td><td data-label="Remediation">{f.remediation}</td></tr>)}</tbody></table>}
   </main></>
 }

@@ -49,8 +49,17 @@ def scan(repo_url: str, timeout_sec: int = 180) -> ScanReport:
             return aggregate(repo_url, tool_errors=tool_errors,
                              error=f"Could not clone repository: {exc.stderr.strip() or 'git clone failed.'}")
 
-        if _directory_size_bytes(checkout) > MAX_CLONE_SIZE_BYTES:
+        try:
+            commit_sha = subprocess.run(["git", "-C", checkout, "rev-parse", "HEAD"], capture_output=True,
+                                        text=True, timeout=_remaining(deadline), check=True).stdout.strip()
+        except subprocess.TimeoutExpired:
+            return aggregate(repo_url, tool_errors=tool_errors, scan_timed_out=True)
+        except subprocess.CalledProcessError as exc:
             return aggregate(repo_url, tool_errors=tool_errors,
+                             error=f"Could not resolve cloned commit: {exc.stderr.strip() or 'git rev-parse failed.'}")
+
+        if _directory_size_bytes(checkout) > MAX_CLONE_SIZE_BYTES:
+            return aggregate(repo_url, tool_errors=tool_errors, commit_sha=commit_sha,
                              error="Repository exceeds the 200MB scan limit.")
 
         # Sequential execution deliberately limits memory use on small Render instances.
@@ -58,8 +67,10 @@ def scan(repo_url: str, timeout_sec: int = 180) -> ScanReport:
             try:
                 outputs.append(runner(checkout, timeout=_remaining(deadline)))
             except subprocess.TimeoutExpired:
-                return aggregate(repo_url, *outputs, tool_errors=tool_errors, scan_timed_out=True)
+                return aggregate(repo_url, *outputs, tool_errors=tool_errors, scan_timed_out=True,
+                                 commit_sha=commit_sha, clone_root=checkout)
             except Exception as exc:  # An unavailable/crashed scanner must not cancel other scans.
                 tool_errors.append(f"{tool_name}: {exc}")
         timed_out = time.monotonic() >= deadline
-        return aggregate(repo_url, *outputs, tool_errors=tool_errors, scan_timed_out=timed_out)
+        return aggregate(repo_url, *outputs, tool_errors=tool_errors, scan_timed_out=timed_out,
+                         commit_sha=commit_sha, clone_root=checkout)

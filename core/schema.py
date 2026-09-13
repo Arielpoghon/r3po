@@ -18,10 +18,12 @@ class Finding(BaseModel):
     title: str
     description: str
     remediation: str | None = None
+    source_url: str | None = None
 
 
 class ScanReport(BaseModel):
     repo_url: str
+    commit_sha: str | None = None
     findings: list[Finding] = Field(default_factory=list)
     tool_errors: list[str] = Field(default_factory=list)
     error: str | None = None

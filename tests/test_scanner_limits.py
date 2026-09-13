@@ -12,7 +12,7 @@ def test_invalid_url_is_rejected_without_clone():
 
 
 def test_oversize_clone_is_rejected():
-    with patch("core.scanner.subprocess.run", return_value=Mock()), patch(
+    with patch("core.scanner.subprocess.run", return_value=Mock(stdout="a" * 40 + "\n")), patch(
         "core.scanner._directory_size_bytes", return_value=MAX_CLONE_SIZE_BYTES + 1
     ):
         report = scan("https://github.com/owner/repo")
@@ -20,7 +20,7 @@ def test_oversize_clone_is_rejected():
 
 
 def test_tool_timeout_returns_partial_result():
-    with patch("core.scanner.subprocess.run", return_value=Mock()), patch(
+    with patch("core.scanner.subprocess.run", return_value=Mock(stdout="a" * 40 + "\n")), patch(
         "core.scanner._directory_size_bytes", return_value=1
     ), patch("core.scanner.trivy_runner.run", side_effect=subprocess.TimeoutExpired("trivy", 1)):
         report = scan("https://github.com/owner/repo")
